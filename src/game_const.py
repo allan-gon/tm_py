@@ -35,19 +35,12 @@ VIEW_HEIGHT = 64
 SPRITE_WIDTH = 12
 SPRITE_HEIGHT = 12
 
-EARTH_WIDTH = 12
-EARTH_HEIGHT = 12
-
 # windows size
 WINDOW_WIDTH = 768
 WINDOW_HEIGHT = 768
-
-# colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
 
 # fonts
 FONT = "timesnewroman"
 FONT_SIZE = 32
 
-FPS = 60
+FPS_LIMIT = 60

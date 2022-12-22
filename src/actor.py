@@ -12,7 +12,7 @@ class Actor:
         depth: int,
         size: float,
     ):
-        self.visible = visible
+        self.is_visible = visible
         self.x = x
         self.y = y
         self.image = image
