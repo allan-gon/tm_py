@@ -16,7 +16,7 @@ class Direction(Enum):
     UP = 4
 
 
-class Images(Enum):
+class Image(Enum):
     PLAYER = "dig1.tga"
     PROTESTER = "protester1.tga"
     HARD_CORE_PROTESTER = "hardcore1.tga"
@@ -27,3 +27,20 @@ class Images(Enum):
     GOLD = "gold.tga"
     SONAR = "sonar.tga"
     WATER_POOL = "waterpool.tga"
+
+
+class Sound(Enum):
+    THEME = "theme.wav"
+    PROTESTER_GIVE_UP = "giveup.wav"
+    PLAYER_GIVE_UP = "die.wav"
+    PROTESTER_YELL = "goaway.wav"
+    PLAYER_SQUIRT = "squirt.wav"
+    GOT_GOODIE = "woohoo.wav"
+    DIG = "digging.wav"
+    FINISHED_LEVEL = "finished.wav"
+    FOUND_OIL = "foundoil.wav"
+    PROTESTER_ANNOYED = "ouch.wav"
+    PLAYER_ANNOYED = "ouch.wav"
+    PROTESTER_FOUND_GOLD = "bribed.wav"
+    SONAR = "sonar.wav"
+    FALLING_ROCK = "rockslide.wav"

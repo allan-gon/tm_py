@@ -1,28 +1,14 @@
-from src.game_enums import Direction, Images
+from src.game_enums import Direction
 
 
 class Actor:
-    def __init__(
-        self,
-        visible: bool,
-        x: int,
-        y: int,
-        image: Images,
-        direction: Direction,
-        depth: int,
-        size: float,
-    ):
+    # depth, size, and image are class vars since all instances will use same thing
+    def __init__(self, visible: bool, x: int, y: int, direction: Direction):
         self.is_visible = visible
         self.x = x
         self.y = y
-        self.image = image
         self.direction = direction
-        self.depth = depth
-        self.size = size
 
     def move_to(self, x: int, y: int):
         self.x = x
         self.y = y
-
-
-# animation stuff is not built out

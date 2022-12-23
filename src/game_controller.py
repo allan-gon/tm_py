@@ -1,6 +1,7 @@
-from src.game_enums import *
+from src.game_enums import GameState, Direction, Sound
 from src.game_const import *
 from src.earth import Earth
+from src.tunnelman import TunnelMan
 import pygame
 
 
@@ -8,6 +9,7 @@ class GameController:
     def __init__(self):
         self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.earth = []
+        self.player = None
         self.state = GameState.START_MENU
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("TunnelMan")
@@ -51,6 +53,11 @@ class GameController:
         return
 
     def init_world(self):
+        self.create_earth()
+        self.player = TunnelMan()
+        return
+
+    def create_earth(self):
         self.earth = []
         for row in range(VIEW_WIDTH):
             temp = []
@@ -58,24 +65,33 @@ class GameController:
                 if row < 4:
                     temp.append(None)
                 elif row > 59:
-                    temp.append(Earth(col * SPRITE_WIDTH, row * SPRITE_HEIGHT))
+                    temp.append(Earth(col, row))
                 elif 29 < col < 34:
                     temp.append(None)
                 else:
-                    temp.append(Earth(col * SPRITE_WIDTH, row * SPRITE_HEIGHT))
+                    temp.append(Earth(col, row))
             self.earth.append(temp)
         return
 
+    def draw_actor(self, actor, image):
+        self.window.blit(
+            image,
+            (
+                BORDER + (actor.x * SPRITE_WIDTH * Earth.SIZE),
+                BORDER + (actor.y * SPRITE_HEIGHT * Earth.SIZE),
+            ),
+        )
+        return
+
     def draw_earth(self):
-        earth_img = pygame.image.load(f"./assets/{Images.EARTH.value}")
-        earth_img = pygame.transform.scale(earth_img, (SPRITE_WIDTH, SPRITE_HEIGHT))
         for row in self.earth:
             for earth in row:
                 if earth and earth.is_visible:
-                    self.window.blit(earth_img, (earth.x, earth.y))
+                    self.draw_actor(earth, Earth.img)
         return
 
     def draw_tm(self):
+        self.draw_actor(self.player, TunnelMan.img)
         return
 
     def draw_world(self):
