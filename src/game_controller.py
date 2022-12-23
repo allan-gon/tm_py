@@ -1,7 +1,7 @@
 from src.game_enums import GameState, Direction, Sound
+from src.tunnelman import TunnelMan
 from src.game_const import *
 from src.earth import Earth
-from src.tunnelman import TunnelMan
 import pygame
 
 
@@ -37,7 +37,9 @@ class GameController:
                 case GameState.BEAT_LEVEL_MENU:
                     pass
                 case GameState.GAME_OVER:
-                    pass
+                    # draw game over screen
+                    # check if pressed enter
+                    run = False
             # chek if quit
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -122,4 +124,8 @@ class GameController:
         # analogous to alive. I alive attr is unnecessary
         if self.player.is_visible:
             return GameState.PLAYING
+        return
+
+    def stop(self):
+        self.state = GameState.GAME_OVER
         return
