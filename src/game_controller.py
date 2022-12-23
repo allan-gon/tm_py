@@ -83,13 +83,14 @@ class GameController:
 
     def draw_actor(self, actor, image):
         # when img loaded, right is the default
+        # rot is counter clock bc circle
         match actor.direction:
             case Direction.LEFT:
                 image = pygame.transform.flip(image, True, False)
             case Direction.UP:
-                image = pygame.transform.rotate(image, 270)
-            case Direction.DOWN:
                 image = pygame.transform.rotate(image, 90)
+            case Direction.DOWN:
+                image = pygame.transform.rotate(image, 270)
         self.window.blit(
             image,
             (
@@ -116,7 +117,7 @@ class GameController:
         return
 
     def move(self, keys) -> GameState:
-        self.player.doSomething(keys)
+        self.player.doSomething(keys, self.earth)
 
         # analogous to alive. I alive attr is unnecessary
         if self.player.is_visible:
