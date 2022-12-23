@@ -13,20 +13,20 @@ from pygame.image import load
 
 class TunnelMan(Actor):
     DEPTH = 1  # check if depth is right
-    SIZE = 1
-    img = load(f"./assets/{Image.PLAYER.value}")
-    img = scale(img, (SPRITE_WIDTH * SIZE, SPRITE_HEIGHT * SIZE))
+    imgs = [load(f"./assets/{asset}") for asset in Image.PLAYER.value]
+    imgs = [scale(img, (SPRITE_WIDTH, SPRITE_HEIGHT)) for img in imgs]
 
     def __init__(self):
         super().__init__(True, 30, 0, Direction.RIGHT)
 
-    def doSomething(self, keys, earth):
+    def do_something(self, keys, earth):
         # up and down inc reversed bc origin is top left not bot left
         if keys[K_w]:
             if self.direction == Direction.UP:
                 if self.y > 0:
                     self.dig(earth)
                     self.y -= 1
+                    self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
                 self.direction = Direction.UP
         elif keys[K_s]:
@@ -34,6 +34,7 @@ class TunnelMan(Actor):
                 if self.y < 60:
                     self.dig(earth)
                     self.y += 1
+                    self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
                 self.direction = Direction.DOWN
         elif keys[K_a]:
@@ -41,6 +42,7 @@ class TunnelMan(Actor):
                 if self.x > 0:
                     self.dig(earth)
                     self.x -= 1
+                    self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
                 self.direction = Direction.LEFT
         elif keys[K_d]:
@@ -48,6 +50,7 @@ class TunnelMan(Actor):
                 if self.x < 60:
                     self.dig(earth)
                     self.x += 1
+                    self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
                 self.direction = Direction.RIGHT
         return
@@ -76,3 +79,5 @@ class TunnelMan(Actor):
 
 # animate movement
 # TODO: think about simpler way to check dir
+
+# if move change image, 1, 2, 3, 4

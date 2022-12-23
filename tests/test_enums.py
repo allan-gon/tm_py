@@ -13,6 +13,6 @@ def test_valid_image_assets(assets):
         assert image_file.value in assets
 
 
-def test_valid_sound_assets(assets):
-    for audio_file in Sound:
-        assert audio_file.value in assets
+# def test_valid_sound_assets(assets):
+#     for audio_file in Sound:
+#         assert audio_file.value in assets

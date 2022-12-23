@@ -14,5 +14,6 @@ SPRITE_HEIGHT = 4 * (WINDOW_HEIGHT - (2 * BORDER)) // 64
 FONT = "freeserif"
 FONT_SIZE = 32
 
-# 60 is xgames mode
 FPS_LIMIT = 30
+
+LIVES = 3

@@ -1,15 +1,23 @@
-from src.game_enums import GameState, Direction, Sound
+from src.game_enums import GameState, Direction, Music
 from src.tunnelman import TunnelMan
+from src.helper import gen_coords
 from src.game_const import *
 from src.earth import Earth
+from src.oil import Oil
 import pygame
 
 
 class GameController:
     def __init__(self):
         self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        self.earth = []
+        self.score = 0
+        self.level = 0
+        self.live = LIVES
         self.player = None
+        self.earth = []
+        self.barrels = []
+        self.gold = []
+        self.boulders = []
         self.state = GameState.START_MENU
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("TunnelMan")
@@ -63,8 +71,10 @@ class GameController:
         return
 
     def init_world(self):
-        self.create_earth()
         self.player = TunnelMan()
+        self.create_earth()
+        self.calc_barrels()
+        self.create_barrels()
         return
 
     def create_earth(self):
@@ -110,22 +120,59 @@ class GameController:
         return
 
     def draw_tm(self):
-        self.draw_actor(self.player, TunnelMan.img)
+        self.draw_actor(self.player, TunnelMan.imgs[self.player.img_num])
         return
 
     def draw_world(self):
+        # depth is just order things are drawn in
         self.draw_earth()
+        self.draw_barrels()
         self.draw_tm()
         return
 
     def move(self, keys) -> GameState:
-        self.player.doSomething(keys, self.earth)
+        self.player.do_something(keys, self.earth)
 
-        # analogous to alive. I alive attr is unnecessary
-        if self.player.is_visible:
+        for barrel in self.barrels:
+            barrel.do_something(self)
+
+        # i think not as innefficient as you might think. should be refs
+        self.barrels = [barrel for barrel in self.barrels if barrel.is_alive]
+
+        if not self.barrels:
+            self.play_sound(Music.FINISHED_LEVEL.value)
+            return GameState.BEAT_LEVEL_MENU
+        elif self.player.is_alive:
             return GameState.PLAYING
+        elif self.lives > 0:
+            self.lives -= 1
+            return GameState.LOST_LIFE_MENU
+        else:
+            return GameState.GAME_OVER
         return
 
-    def stop(self):
-        self.state = GameState.GAME_OVER
+    def play_sound(self, sound):
+        sound.play()
         return
+
+    def create_barrels(self):
+        num = self.calc_barrels()
+        for _ in range(num):
+            dist_actors = self.barrels + self.boulders + self.gold
+            x, y = gen_coords(dist_actors)
+            print(x, y)
+            self.barrels.append(Oil(x, y))
+
+    def calc_barrels(self):
+        return min(2 + self.level, 21)
+
+    def draw_barrels(self):
+        for barrel in self.barrels:
+            if barrel.is_alive and barrel.is_visible:
+                self.draw_actor(barrel, Oil.img)
+
+
+# oil const needs x, y
+# should that be a method or function
+# if I access attributes or methods but dont change
+# the class, should that be a function or method
