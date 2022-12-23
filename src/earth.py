@@ -1,5 +1,5 @@
-from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT, BORDER
-from src.game_enums import Image, Direction
+from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
+from src.game_enums import Image
 from src.actor import Actor
 
 from pygame.transform import scale
@@ -13,4 +13,4 @@ class Earth(Actor):
     img = scale(img, (SPRITE_WIDTH * SIZE, SPRITE_HEIGHT * SIZE))
 
     def __init__(self, x: int, y: int):
-        super().__init__(True, x, y, Direction.RIGHT)
+        super().__init__(True, x, y, None)

@@ -10,9 +10,9 @@ BORDER = 32
 SPRITE_WIDTH = 4 * (WINDOW_WIDTH - (2 * BORDER)) // 64
 SPRITE_HEIGHT = 4 * (WINDOW_HEIGHT - (2 * BORDER)) // 64
 
-
 # fonts
-FONT = "timesnewroman"
+FONT = "freeserif"
 FONT_SIZE = 32
 
-FPS_LIMIT = 60
+# 60 is xgames mode
+FPS_LIMIT = 30

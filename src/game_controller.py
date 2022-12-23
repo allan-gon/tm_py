@@ -23,13 +23,21 @@ class GameController:
             self.window.fill("black")
             keys = pygame.key.get_pressed()
             # draw according to state
-            if self.state == GameState.START_MENU:
-                self.draw_start_menu()
-                if keys[pygame.K_RETURN]:
-                    self.state = GameState.PLAYING
-                    self.init_world()
-            elif self.state == GameState.PLAYING:
-                self.draw_world()
+            match self.state:
+                case GameState.START_MENU:
+                    self.draw_start_menu()
+                    if keys[pygame.K_RETURN]:
+                        self.state = GameState.PLAYING
+                        self.init_world()
+                case GameState.PLAYING:
+                    self.draw_world()
+                    self.state = self.move(keys)
+                case GameState.LOST_LIFE_MENU:
+                    pass
+                case GameState.BEAT_LEVEL_MENU:
+                    pass
+                case GameState.GAME_OVER:
+                    pass
             # chek if quit
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -74,6 +82,14 @@ class GameController:
         return
 
     def draw_actor(self, actor, image):
+        # when img loaded, right is the default
+        match actor.direction:
+            case Direction.LEFT:
+                image = pygame.transform.flip(image, True, False)
+            case Direction.UP:
+                image = pygame.transform.rotate(image, 270)
+            case Direction.DOWN:
+                image = pygame.transform.rotate(image, 90)
         self.window.blit(
             image,
             (
@@ -97,4 +113,12 @@ class GameController:
     def draw_world(self):
         self.draw_earth()
         self.draw_tm()
+        return
+
+    def move(self, keys) -> GameState:
+        self.player.doSomething(keys)
+
+        # analogous to alive. I alive attr is unnecessary
+        if self.player.is_visible:
+            return GameState.PLAYING
         return
