@@ -55,3 +55,4 @@ class Music(Enum):
 
 
 # where should I load sounds. should this happen in the Music enum?
+# make sure this only happens once
