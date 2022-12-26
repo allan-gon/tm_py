@@ -1,9 +1,10 @@
 from src.game_enums import Direction
+from abc import ABC, abstractmethod
 
 
-class Actor:
+class Actor(ABC):
     # depth, size, and image are class vars since all instances will use same thing
-    def __init__(self, visible: bool, x: int, y: int, direction: Direction):
+    def __init__(self, x: int, y: int, visible: bool, direction: Direction):
         self.is_visible = visible
         self.is_alive = True
         self.x = x
@@ -14,3 +15,7 @@ class Actor:
     def move_to(self, x: int, y: int):
         self.x = x
         self.y = y
+
+    @abstractmethod
+    def do_something(self, *args) -> None:
+        pass

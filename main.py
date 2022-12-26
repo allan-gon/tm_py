@@ -1,9 +1,8 @@
-from src.game_controller import GameController
+from src.controller import GameController
 
 
-def main():
+def main() -> None:
     GameController().run()
-    return
 
 
 if __name__ == "__main__":

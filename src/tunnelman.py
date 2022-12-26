@@ -2,7 +2,6 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT, BORDER
 from src.game_enums import Image, Direction
 from src.actor import Actor
-
 from pygame import K_w, K_a, K_s, K_d, K_SPACE, K_TAB, K_ESCAPE
 from pygame.transform import scale
 from pygame.image import load
@@ -12,12 +11,11 @@ from pygame.image import load
 
 
 class TunnelMan(Actor):
-    DEPTH = 1  # check if depth is right
     imgs = [load(f"./assets/{asset}") for asset in Image.PLAYER.value]
     imgs = [scale(img, (SPRITE_WIDTH, SPRITE_HEIGHT)) for img in imgs]
 
     def __init__(self):
-        super().__init__(True, 30, 0, Direction.RIGHT)
+        super().__init__(30, 0, visible=True, direction=Direction.RIGHT)
 
     def do_something(self, keys, earth):
         # up and down inc reversed bc origin is top left not bot left

@@ -1,5 +1,6 @@
 from random import sample, randint
 from src.actor import Actor
+from src.earth import Earth
 
 
 def in_range(a1: Actor, a2: Actor, distance: float = 6.0) -> bool:
@@ -8,7 +9,7 @@ def in_range(a1: Actor, a2: Actor, distance: float = 6.0) -> bool:
 
 def gen_coords(actors: list[Actor]) -> tuple[int]:
     # i dont know how i feel about this
-    temp = Actor(None, None, None, None)
+    temp = Earth(None, None)
     valid = False
     while not valid:
         # i think x is 27 bc things are 4x4 so
@@ -22,7 +23,8 @@ def gen_coords(actors: list[Actor]) -> tuple[int]:
             valid = True
     return temp.x, temp.y
 
-# maybe make all params optional so 
+
+# maybe make all params optional so
 # const here is empty and it's clear that this is garbo
 # instance
 

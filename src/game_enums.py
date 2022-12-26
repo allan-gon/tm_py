@@ -1,21 +1,21 @@
 from pygame.mixer import Sound
+from enum import Enum, auto
 from pygame import init
-from enum import Enum
 
 
 class GameState(Enum):
-    START_MENU = 1
-    PLAYING = 2
-    LOST_LIFE_MENU = 3
-    BEAT_LEVEL_MENU = 4
-    GAME_OVER = 5
+    START_MENU = auto()
+    PLAYING = auto()
+    LOST_LIFE_MENU = auto()
+    BEAT_LEVEL_MENU = auto()
+    GAME_OVER = auto()
 
 
 class Direction(Enum):
-    LEFT = 1
-    RIGHT = 2
-    DOWN = 3
-    UP = 4
+    LEFT = auto()
+    RIGHT = auto()
+    DOWN = auto()
+    UP = auto()
 
 
 class Image(Enum):
