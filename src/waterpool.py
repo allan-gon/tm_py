@@ -1,11 +1,11 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
 from src.game_enums import Direction, Image, Music
-from src.lifespan_actor import LifespanActor
+from src.actor import Actor
 from pygame.transform import scale
 from pygame.image import load
 
 
-class WaterPool(LifespanActor):
+class WaterPool(Actor):
     img = load(f"./assets/{Image.WATER_POOL.value}")
     img = scale(img, (SPRITE_WIDTH, SPRITE_HEIGHT))
 

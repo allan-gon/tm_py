@@ -1,11 +1,11 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
 from src.game_enums import Direction, Image, Music
-from src.lifespan_actor import LifespanActor
+from src.actor import Actor
 from pygame.transform import scale
 from pygame.image import load
 
 
-class Sonar(LifespanActor):
+class Sonar(Actor):
     img = load(f"./assets/{Image.SONAR.value}")
     img = scale(img, (SPRITE_WIDTH, SPRITE_HEIGHT))
 

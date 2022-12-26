@@ -11,6 +11,7 @@ class Actor(ABC):
         self.y = y
         self.direction = direction
         self.img_num = 0
+        self.ticks_elapsed = 0
 
     def move_to(self, x: int, y: int):
         self.x = x
@@ -19,3 +20,7 @@ class Actor(ABC):
     @abstractmethod
     def do_something(self, *args) -> None:
         pass
+
+
+# what needs move_to?
+# tm, pro, hard, bould, spurt

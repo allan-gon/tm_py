@@ -1,11 +1,11 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
 from src.game_enums import Direction, Image, Music
-from src.lifespan_actor import LifespanActor
+from src.actor import Actor
 from pygame.transform import scale
 from pygame.image import load
 
 
-class Squirt(LifespanActor):
+class Squirt(Actor):
     imgs = [load(f"./assets/{asset}") for asset in Image.WATER_SPURT.value]
     imgs = [scale(img, (SPRITE_WIDTH, SPRITE_HEIGHT)) for img in imgs]
 
