@@ -18,7 +18,7 @@ class TunnelMan(Actor):
         self.gold = 0
         super().__init__(30, 0, visible=True, direction=Direction.RIGHT)
 
-    def do_something(self, keys, earth):
+    def do_something(self, keys: list, earth: list[list[Actor or None]]):
         # up and down inc reversed bc origin is top left not bot left
         if keys[K_w]:
             if self.direction == Direction.UP:
@@ -54,7 +54,7 @@ class TunnelMan(Actor):
                 self.direction = Direction.RIGHT
         return
 
-    def dig(self, earth):
+    def dig(self, earth: list[list[Actor or None]]) -> None:
         # digging doesn't bounds check because dig only called if in bounds
         match self.direction:
             case Direction.UP:
@@ -73,7 +73,6 @@ class TunnelMan(Actor):
                 for i in range(4):
                     if earth[self.y + i][self.x + 4]:
                         earth[self.y + i][self.x + 4].is_visible = False
-        return
 
 
 # animate movement

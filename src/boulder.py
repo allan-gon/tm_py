@@ -1,5 +1,6 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
 from src.game_enums import Direction, Image, Music
+from src.helper import in_range
 from src.actor import Actor
 from enum import Enum, auto
 from pygame.transform import scale
@@ -35,7 +36,7 @@ class Boulder(Actor):
         match self.state:
             case State.STABLE:
                 # doesn't have to check if at bottom because gen coords
-                if not model.dirt_in_1x4_below_actor(self):
+                if not self.dirt_in_1x4_below_actor(model.earth):
                     self.state = State.WAITING
             case State.WAITING:
                 if self.ticks_elapsed != 30:
@@ -46,7 +47,47 @@ class Boulder(Actor):
             case State.FALLING:
                 self.y += 1
                 self.img_num = (self.img_num + 1) % len(Boulder.imgs)
-                if model.hit_earth_or_boulder(self):
+                if self.hit_earth_or_boulder(model.earth, model.boulders):
                     self.is_alive = False
                 else:
-                    model.hit_entity(self)
+                    self.hit_entity(
+                        model.player,  # model.regular_protesters, model.harcore_protesters
+                    )
+
+    def dirt_in_1x4_below_actor(self, earths: list[list[Actor or None]]) -> bool:
+        for i in range(4):
+            earth = earths[self.y + 4][self.x + i]
+            if earth and earth.is_visible:
+                return True
+        return False
+
+    def hit_earth_or_boulder(
+        self, earth: list[list[Actor or None]], boulders: list[Actor]
+    ) -> bool:
+        # do i want to stop when it overlaps or the tick before
+        if self.dirt_in_1x4_below_actor(earth):
+            return True
+        else:
+            for boulder in boulders:
+                # don't count yourself
+                if (boulder.x != self.x) and (boulder.y != self.y):
+                    if (
+                        (self.x - 4) < boulder.x < (self.x + 4)
+                    ) and boulder.y == self.y + 4:
+                        return True
+        return False
+
+    def hit_entity(
+        self,
+        player: Actor,  # regular: list[Actor], hardcore: list[Actor]
+    ) -> None:
+        if in_range(player, self, 3):
+            player.is_alive = False
+            return
+        # TODO: missing rg, hp, and state
+        # for rp in regular:
+        #     if in_range(actor, rp, 3):
+        #         rp.state = State.LEAVE
+        # for hp in hardcore:
+        #     if in_range(actor, hp, 3):
+        #         hp.state = State.LEAVE

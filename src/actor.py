@@ -16,7 +16,3 @@ class Actor(ABC):
     @abstractmethod
     def do_something(self, *args) -> None:
         pass
-
-
-# what needs move_to?
-# tm, pro, hard, bould, spurt

@@ -137,39 +137,6 @@ class GameModel:
             else:
                 self.state = GameState.LOST_LIFE_MENU
 
-    def dirt_in_1x4_below_actor(self, actor: Actor) -> bool:
-        for i in range(4):
-            earth = self.earth[actor.y + 4][actor.x + i]
-            if earth and earth.is_visible:
-                return True
-        return False
-
-    def hit_earth_or_boulder(self, actor: Actor) -> bool:
-        # do i want to stop when it overlaps or the tick before
-        if self.dirt_in_1x4_below_actor(actor):
-            return True
-        else:
-            for boulder in self.boulders:
-                # don't count yourself
-                if (boulder.x != actor.x) and (boulder.y != actor.y):
-                    if (
-                        (actor.x - 4) < boulder.x < (actor.x + 4)
-                    ) and boulder.y == actor.y + 4:
-                        return True
-        return False
-
-    def hit_entity(self, actor: Actor) -> None:
-        if in_range(actor, self.player, 3):
-            self.player.is_alive = False
-            return
-        # TODO: missing rg, hp, and state
-        # for rp in self.regular_protesters:
-        #     if in_range(actor, rp, 3):
-        #         rp.state = State.LEAVE
-        # for hp in self.hardcore_protesters:
-        #     if in_range(actor, hp, 3):
-        #         hp.state = State.LEAVE
-
 
 # need to keep track of:
 # level, score, lives
