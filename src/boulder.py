@@ -33,9 +33,8 @@ class Boulder(Actor):
                 if self.ticks_elapsed != 30:
                     self.ticks_elapsed += 1
                 else:
-                    pass
-                    # self.state = State.FALLING
-                    # view.play_sound(Music.FALLING_ROCK)
+                    self.state = State.FALLING
+                    view.play_sound(Music.FALLING_ROCK)
             case State.FALLING:
                 self.y += 1
                 self.img_num = (self.img_num + 1) % len(Boulder.imgs)

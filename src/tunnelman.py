@@ -79,10 +79,6 @@ class TunnelMan(Actor):
                         earth[self.y + i][self.x + 4].is_visible = False
 
     def boulder_obstructs(self, boulders: list[Actor]) -> bool:
-        # prevent index error
-        if (self.y < 4) or (self.y > 60) or (self.x < 4) or (self.x > 60):
-            return False
-
         match self.direction:
             case Direction.UP:
                 for boulder in boulders:
@@ -90,16 +86,22 @@ class TunnelMan(Actor):
                         (self.x - 4) < boulder.x < (self.x + 4)
                     ):
                         return True
-            # case Direction.DOWN:
-            #     for boulder in boulders:
-            #         if ...:
-            #             return True
-            # case Direction.LEFT:
-            #     for boulder in boulders:
-            #         if ...:
-            #             return True
-            # case Direction.RIGHT:
-            #     for boulder in boulders:
-            #         if ...:
-            #             return True
+            case Direction.DOWN:
+                for boulder in boulders:
+                    if (boulder.y == (self.y + 4)) and (
+                        (self.x - 4) < boulder.x < (self.x + 4)
+                    ):
+                        return True
+            case Direction.LEFT:
+                for boulder in boulders:
+                    if (boulder.x == (self.x - 4)) and (
+                        (self.y - 4) < boulder.y < (self.y + 4)
+                    ):
+                        return True
+            case Direction.RIGHT:
+                for boulder in boulders:
+                    if (boulder.x == (self.x + 4)) and (
+                        (self.y - 4) < boulder.y < (self.y + 4)
+                    ):
+                        return True
         return False
