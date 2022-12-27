@@ -1,6 +1,6 @@
 from src.game_const import VIEW_HEIGHT, VIEW_WIDTH
 from src.game_const import START_LIVES
-from src.game_enums import GameState
+from src.game_enums import GameState, Direction
 from src.helper import gen_coords
 from src.tunnelman import TunnelMan
 from src.waterpool import WaterPool
@@ -49,6 +49,12 @@ class GameModel:
                     temp.append(Earth(col, row))
             self.earth.append(temp)
 
+    def clear_4x4(self, x, y) -> None:
+        for i in range(4):
+            for j in range(4):
+                if self.earth[y + j][x + i]:
+                    self.earth[y + j][x + i].is_visible = False
+
     def calc_oil(self) -> int:
         return min(2 + self.level, 21)
 
@@ -60,11 +66,33 @@ class GameModel:
             print(x, y)
             self.oil.append(Oil(x, y))
 
+    def calc_boulders(self) -> int:
+        return min((self.level // 2) + 2, 9)
+
+    def create_boulders(self) -> None:
+        self.boulders = []
+        for _ in range(self.calc_boulders()):
+            dist_actors = self.oil + self.boulders + self.gold
+            x, y = gen_coords(dist_actors, 40)
+            self.boulders.append(Boulder(x, y))
+            self.clear_4x4(x, y)
+
+    def calc_gold(self) -> int:
+        return max((5 - self.level) // 2, 2)
+
+    def create_gold(self) -> None:
+        self.gold = []
+        for _ in range(self.calc_gold()):
+            dist_actors = self.oil + self.boulders + self.gold
+            x, y = gen_coords(dist_actors)
+            self.gold.append(Gold(x, y))
+
     def create_new_world(self) -> None:
         self.init_earth()
         self.create_oil()
-        # self.create_gold()
         self.sonar = Sonar()
+        self.create_boulders()
+        self.create_gold()
         # TODO: protesters
         self.player = TunnelMan()
 
@@ -75,7 +103,7 @@ class GameModel:
         self.oil = [oil for oil in self.oil if oil.is_alive]
 
         for gold in self.gold:
-            gold.do_something()
+            gold.do_something(self, view)
         self.gold = [gold for gold in self.gold if gold.is_alive]
 
         if self.sonar:
