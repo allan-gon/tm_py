@@ -105,23 +105,23 @@ class GameModel:
         self.gold = [gold for gold in self.gold if gold.is_alive]
 
         if self.sonar:
-            self.sonar.do_something()
+            self.sonar.do_something(self, view)
             if not self.sonar.is_alive:
                 self.sonar = None
 
         for pool in self.water:
-            pool.do_something()
+            pool.do_something(self, view)
         self.water = [pool for pool in self.water if pool.is_alive]
 
         for spurt in self.squirts:
-            spurt.do_something()
+            spurt.do_something(self, view)
         self.squirts = [spurt for spurt in self.squirts if spurt.is_alive]
 
         for boulder in self.boulders:
             boulder.do_something(self, view)
         self.boulders = [boulder for boulder in self.boulders if boulder.is_alive]
 
-        self.player.do_something(keys_pressed, self.earth)
+        self.player.do_something(self, view, keys_pressed)
 
         # TODO: missing protesters
 

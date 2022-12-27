@@ -1,5 +1,5 @@
-from src.actor import Actor
+# from src.actor import Actor
 
 
-class Entity(Actor):
-    pass
+# class Entity(Actor):
+#     pass

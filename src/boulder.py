@@ -1,7 +1,7 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
 from src.game_enums import Direction, Image, Music
 from src.helper import in_range
-from src.actor import Actor
+from src.actor import *
 from enum import Enum, auto
 from pygame.transform import scale
 from pygame.image import load
@@ -11,15 +11,6 @@ class State(Enum):
     STABLE = auto()
     WAITING = auto()
     FALLING = auto()
-
-
-# forward declerations for type hinting
-class GameModel:
-    pass
-
-
-class GameView:
-    pass
 
 
 class Boulder(Actor):
@@ -42,8 +33,9 @@ class Boulder(Actor):
                 if self.ticks_elapsed != 30:
                     self.ticks_elapsed += 1
                 else:
-                    self.state = State.FALLING
-                    view.play_sound(Music.FALLING_ROCK)
+                    pass
+                    # self.state = State.FALLING
+                    # view.play_sound(Music.FALLING_ROCK)
             case State.FALLING:
                 self.y += 1
                 self.img_num = (self.img_num + 1) % len(Boulder.imgs)

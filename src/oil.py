@@ -1,18 +1,9 @@
 from src.game_const import SPRITE_HEIGHT, SPRITE_WIDTH
 from src.game_enums import Direction, Music, Image
 from src.helper import in_range
-from src.actor import Actor
+from src.actor import *
 from pygame.transform import scale
 from pygame.image import load
-
-
-# forward declerations for type hinting
-class GameModel:
-    pass
-
-
-class GameView:
-    pass
 
 
 class Oil(Actor):

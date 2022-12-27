@@ -1,6 +1,6 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
 from src.game_enums import Image, Direction
-from src.actor import Actor
+from src.actor import *
 from pygame.transform import scale
 from pygame.image import load
 
