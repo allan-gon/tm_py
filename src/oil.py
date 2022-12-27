@@ -28,5 +28,5 @@ class Oil(Actor):
                 self.is_visible = True
         elif in_range(self, model.player, 3):
             self.is_alive = False
-            view.play_sound(Music.FOUND_OIL.value)
+            view.play_sound(Music.FOUND_OIL)
             model.score += 1000

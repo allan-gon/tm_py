@@ -84,4 +84,4 @@ class GameView:
         update()
 
     def play_sound(self, sound: Music):
-        sound.play()
+        sound.value.play()

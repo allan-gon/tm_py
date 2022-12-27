@@ -1,19 +1,16 @@
 from src.game_const import VIEW_HEIGHT, VIEW_WIDTH
 from src.game_const import START_LIVES
 from src.game_enums import GameState, Direction
-from src.helper import gen_coords
+from src.helper import gen_coords, in_range
 from src.tunnelman import TunnelMan
 from src.waterpool import WaterPool
 from src.boulder import Boulder
 from src.squirt import Squirt
+from src.actor import Actor
 from src.sonar import Sonar
 from src.earth import Earth
 from src.gold import Gold
 from src.oil import Oil
-
-
-def create_boulders() -> list[Boulder]:
-    return []
 
 
 class GameModel:
@@ -95,6 +92,7 @@ class GameModel:
         self.create_gold()
         # TODO: protesters
         self.player = TunnelMan()
+        print(f"Lives: {self.lives}")
 
     def tick(self, keys_pressed, view):
         # earth does nothing
@@ -120,7 +118,7 @@ class GameModel:
         self.squirts = [spurt for spurt in self.squirts if spurt.is_alive]
 
         for boulder in self.boulders:
-            boulder.do_something()
+            boulder.do_something(self, view)
         self.boulders = [boulder for boulder in self.boulders if boulder.is_alive]
 
         self.player.do_something(keys_pressed, self.earth)
@@ -134,9 +132,43 @@ class GameModel:
             self.state = GameState.PLAYING
         elif self.lives > 0:
             self.lives -= 1
-            self.state = GameState.LOST_LIFE_MENU
+            if not self.lives:
+                self.state = GameState.GAME_OVER
+            else:
+                self.state = GameState.LOST_LIFE_MENU
+
+    def dirt_in_1x4_below_actor(self, actor: Actor) -> bool:
+        for i in range(4):
+            earth = self.earth[actor.y + 4][actor.x + i]
+            if earth and earth.is_visible:
+                return True
+        return False
+
+    def hit_earth_or_boulder(self, actor: Actor) -> bool:
+        # do i want to stop when it overlaps or the tick before
+        if self.dirt_in_1x4_below_actor(actor):
+            return True
         else:
-            self.state = GameState.GAME_OVER
+            for boulder in self.boulders:
+                # don't count yourself
+                if (boulder.x != actor.x) and (boulder.y != actor.y):
+                    if (
+                        (actor.x - 4) < boulder.x < (actor.x + 4)
+                    ) and boulder.y == actor.y + 4:
+                        return True
+        return False
+
+    def hit_entity(self, actor: Actor) -> None:
+        if in_range(actor, self.player, 3):
+            self.player.is_alive = False
+            return
+        # TODO: missing rg, hp, and state
+        # for rp in self.regular_protesters:
+        #     if in_range(actor, rp, 3):
+        #         rp.state = State.LEAVE
+        # for hp in self.hardcore_protesters:
+        #     if in_range(actor, hp, 3):
+        #         hp.state = State.LEAVE
 
 
 # need to keep track of:

@@ -39,6 +39,9 @@ class GameController:
                     self.view.draw_menu(DIED_M1, CONT)
                     if keys_pressed[K_RETURN]:
                         self.model.state = GameState.PLAYING
+                        # TODO: check if, on death, does a tm lose eveything
+                        # gold count, water, etc
+                        self.model.create_new_world()
                 case GameState.BEAT_LEVEL_MENU:
                     self.view.draw_menu(BEAT_M1, CONT)
                     if keys_pressed[K_RETURN]:

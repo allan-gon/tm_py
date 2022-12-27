@@ -40,7 +40,7 @@ class Gold(Actor):
                 for rp in model.regular_protesters:
                     if in_range(self, rp, 3):
                         self.is_alive = False
-                        view.play_sound(Music.PROTESTER_FOUND_GOLD.value)
+                        view.play_sound(Music.PROTESTER_FOUND_GOLD)
                         # rp.state = State.BRIBED
                         model.score += 25
                         bribed = True  # can only bribe one
@@ -48,7 +48,7 @@ class Gold(Actor):
                 for hp in model.hardcore_protesters:
                     if in_range(self, hp, 3):
                         self.is_alive = False
-                        view.play_sound(Music.PROTESTER_FOUND_GOLD.value)
+                        view.play_sound(Music.PROTESTER_FOUND_GOLD)
                         # hp.state = State.BRIBED
                         model.score += 25
                         break
@@ -58,6 +58,6 @@ class Gold(Actor):
                 self.is_visible = True
         elif in_range(self, model.player, 3):
             self.is_alive = False
-            view.play_sound(Music.GOT_GOODIE.value)
+            view.play_sound(Music.GOT_GOODIE)
             model.score += 10
             model.player.gold += 1
