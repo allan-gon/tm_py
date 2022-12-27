@@ -13,10 +13,6 @@ class Actor(ABC):
         self.img_num = 0
         self.ticks_elapsed = 0
 
-    def move_to(self, x: int, y: int):
-        self.x = x
-        self.y = y
-
     @abstractmethod
     def do_something(self, *args) -> None:
         pass

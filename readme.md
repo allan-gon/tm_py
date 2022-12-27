@@ -59,7 +59,6 @@
     - `img_num` = 0: used if an actor has multiple assets to animate the movement
     - `ticks_elapsed` = 0: used for certain actors that need to behave differently depending on how many ticks have passed by. There's coupling happening here. Not all actors care about ticks but making a class that only differs in that it has a ticks atribute feels wasteful.
 - has an abstract method `do_something` where all children will specify what a given actor should do on a tick
-- has a method `move_to`. Takes an x and y and set's the actors x,y to that. There is coupling happening here I'm not happy about since not all actors can move. Only tunnelman, regular protester, hardcore protester, boulder, and squirt move. Solution would be create another class that these inherit from but inheritance for a single class or method feels wasteful. There is SOME overlap between tickful and moving actors but not 1:1 so no worth to make a class that's both.
 - the assets for a given child are class variables because that's more efficient than loading it every single time it's needed and it just feels more natural that it exists within the class
 
 ## Earth
