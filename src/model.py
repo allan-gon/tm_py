@@ -33,6 +33,9 @@ class GameModel:
         self.gold: list[Gold] = []
         self.oil: list[Oil] = []
 
+    def get_stats(self) -> str:
+        return f"Lvl: {self.level} Lives: {self.lives} Hlth: {self.player.health * 10}% Wtr: {self.player.water_count} Gld: {self.player.gold_count} Oil left: {len(self.oil)} Sonar: {self.player.sonar_count} Scr: {self.score}"
+
     def init_earth(self) -> None:
         self.earth = []
         for row in range(VIEW_WIDTH):

@@ -23,6 +23,7 @@ class GameView:
     def __init__(self):
         self.window = set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.font = SysFont(FONT, FONT_SIZE)
+        self.stat_font = SysFont(FONT, BORDER // 2)
         set_caption("TunnelMan")
 
     def draw_menu(self, message_1: str, message_2: str):
@@ -34,10 +35,15 @@ class GameView:
         self.window.blit(m2, (m2_rect))
         update()
 
-    def clear_screen(self):
+    def display_stats(self, model: GameModel) -> None:
+        message = self.stat_font.render(model.get_stats(), True, "white")
+        m_rect = message.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // BORDER))
+        self.window.blit(message, m_rect)
+
+    def clear_screen(self) -> None:
         self.window.fill("black")
 
-    def draw_actor(self, actor: Actor, image):
+    def draw_actor(self, actor: Actor, image) -> None:
         # when img loaded, right is the default
         # rot is counter clock bc circle
         match actor.direction:
@@ -69,7 +75,7 @@ class GameView:
                 else:
                     self.draw_actor(actor, images)
 
-    def draw_world(self, model: GameModel):
+    def draw_world(self, model: GameModel) -> None:
         self.draw_earth(model.earth)
         self.draw_actor_container(model.oil, Oil.img)
         self.draw_actor_container(model.gold, Gold.img)
@@ -81,6 +87,7 @@ class GameView:
         self.draw_actor(model.player, TunnelMan.imgs[model.player.img_num])
         # self.draw_actor_container(model.regular_protester, RegularProtester.imgs)
         # self.draw_actor_container(model.hardcore_protester, HardcoreProtester.imgs)
+        self.display_stats(model)
         update()
 
     def play_sound(self, sound: Music):

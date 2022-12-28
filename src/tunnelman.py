@@ -19,7 +19,7 @@ class TunnelMan(Actor):
         self.gold_count = 0
         self.sonar_count = 1
         self.water_count = 5
-        # missing health: 10
+        self.health = 10
         super().__init__(30, 0, visible=True, direction=Direction.RIGHT)
 
     def do_something(self, model: GameModel, view: GameView, keys: list):
