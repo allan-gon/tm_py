@@ -26,6 +26,7 @@ class GameModel:
         self.chance_spawn_sw = None
         self.protester_spawn_tick_buffer = None
         self.ticks_since_protester_spawn = None
+        self.protester_resting_ticks = None
         self.max_protesters = None
         self.chance_hardcore = None
         # actor containers
@@ -110,6 +111,7 @@ class GameModel:
         self.protester_spawn_tick_buffer = max(25, 200 - self.level)
         self.max_protesters = min(15, int(2 + (self.level * 1.5)))
         self.chance_hardcore = min(90, (self.level * 10) + 30)
+        self.protester_resting_ticks = max(0, 3 - (self.level // 4))
 
     def create_new_world(self) -> None:
         self.init_earth()
@@ -197,7 +199,9 @@ class GameModel:
                     # self.harcore_protesters.append(HardcoreProtester())
                     pass
                 else:
-                    self.regular_protesters.append(RegularProtester())
+                    self.regular_protesters.append(
+                        RegularProtester(self.protester_resting_ticks)
+                    )
 
     def tick(self, keys_pressed, view):
         # earth does nothing
@@ -229,9 +233,14 @@ class GameModel:
         self.player.do_something(self, view, keys_pressed)
 
         # TODO: missing protesters
+        for rp in self.regular_protesters:
+            rp.do_something(self, view)
+        self.regular_protesters = [rp for rp in self.regular_protesters if rp.is_alive]
 
         # try to spawn actors
         self.try_spawn_sonar_water()
+        # TODO: rename to try_add
+        self.add_protester()
 
         if not self.oil:
             self.score += 1000

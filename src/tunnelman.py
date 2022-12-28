@@ -23,8 +23,11 @@ class TunnelMan(Actor):
         super().__init__(30, 0, visible=True, direction=Direction.RIGHT)
 
     def do_something(self, model: GameModel, view: GameView, keys: list):
+        # make sure you didn't die last tick
+        if self.health <= 0:
+            self.is_alive = False
         # non-movement inputs
-        if keys[K_q]:
+        elif keys[K_q]:
             model.lives = 1  # this get drecremented again in model.tick
             self.is_alive = False
         elif keys[K_ESCAPE]:
