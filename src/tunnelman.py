@@ -1,6 +1,6 @@
 # from src.entity import Entity
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT, BORDER
-from src.game_enums import Image, Direction
+from src.game_enums import Image, Direction, Music
 from src.actor import *
 from pygame import K_w, K_a, K_s, K_d, K_SPACE, K_TAB, K_ESCAPE
 from pygame.transform import scale
@@ -25,7 +25,8 @@ class TunnelMan(Actor):
         if keys[K_w]:
             if self.direction == Direction.UP:
                 if self.y > 0:
-                    self.dig(model.earth)
+                    if self.dig(model.earth):
+                        view.play_sound(Music.DIG)
                     if not self.boulder_obstructs(model.boulders):
                         self.y -= 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
@@ -34,7 +35,8 @@ class TunnelMan(Actor):
         elif keys[K_s]:
             if self.direction == Direction.DOWN:
                 if self.y < 60:
-                    self.dig(model.earth)
+                    if self.dig(model.earth):
+                        view.play_sound(Music.DIG)
                     if not self.boulder_obstructs(model.boulders):
                         self.y += 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
@@ -43,7 +45,8 @@ class TunnelMan(Actor):
         elif keys[K_a]:
             if self.direction == Direction.LEFT:
                 if self.x > 0:
-                    self.dig(model.earth)
+                    if self.dig(model.earth):
+                        view.play_sound(Music.DIG)
                     if not self.boulder_obstructs(model.boulders):
                         self.x -= 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
@@ -52,33 +55,43 @@ class TunnelMan(Actor):
         elif keys[K_d]:
             if self.direction == Direction.RIGHT:
                 if self.x < 60:
-                    self.dig(model.earth)
+                    if self.dig(model.earth):
+                        view.play_sound(Music.DIG)
                     if not self.boulder_obstructs(model.boulders):
                         self.x += 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
                 self.direction = Direction.RIGHT
-        return
 
-    def dig(self, earth: list[list[Actor or None]]) -> None:
+    def dig(self, earths: list[list[Actor or None]]) -> bool:
         # digging doesn't bounds check because dig only called if in bounds
+        dug = False
         match self.direction:
             case Direction.UP:
                 for i in range(4):
-                    if earth[self.y - 1][self.x + i]:
-                        earth[self.y - 1][self.x + i].is_visible = False
+                    earth = earths[self.y - 1][self.x + i]
+                    if earth and earth.is_visible:
+                        earth.is_visible = False
+                        dug = True
             case Direction.DOWN:
                 for i in range(4):
-                    if earth[self.y + 4][self.x + i]:
-                        earth[self.y + 4][self.x + i].is_visible = False
+                    earth = earths[self.y + 4][self.x + i]
+                    if earth and earth.is_visible:
+                        earth.is_visible = False
+                        dug = True
             case Direction.LEFT:
                 for i in range(4):
-                    if earth[self.y + i][self.x - 1]:
-                        earth[self.y + i][self.x - 1].is_visible = False
+                    earth = earths[self.y + i][self.x - 1]
+                    if earth and earth.is_visible:
+                        earth.is_visible = False
+                        dug = True
             case Direction.RIGHT:
                 for i in range(4):
-                    if earth[self.y + i][self.x + 4]:
-                        earth[self.y + i][self.x + 4].is_visible = False
+                    earth = earths[self.y + i][self.x + 4]
+                    if earth and earth.is_visible:
+                        earth.is_visible = False
+                        dug = True
+        return dug
 
     def boulder_obstructs(self, boulders: list[Actor]) -> bool:
         match self.direction:

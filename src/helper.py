@@ -24,6 +24,8 @@ def gen_coords(actors: list[Actor], y_right: int = 60) -> tuple[int]:
     return temp.x, temp.y
 
 
+# audio is delayed. spawning water is bugged.
+# it clipped top layer
 def gen_coords_earthless_4x4(earths: list[list[Earth or None]]) -> tuple[int]:
     valid, broke = False, False
     while not valid:

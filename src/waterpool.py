@@ -22,3 +22,7 @@ class WaterPool(Actor):
             model.player.water_count += 5
             model.score += 100
         self.ticks_elapsed += 1
+
+
+# audio is delayed. spawning water is bugged.
+# it clipped top layer
