@@ -22,3 +22,21 @@ def gen_coords(actors: list[Actor], y_right: int = 60) -> tuple[int]:
         else:
             valid = True
     return temp.x, temp.y
+
+
+def gen_coords_earthless_4x4(earths: list[list[Earth or None]]) -> tuple[int]:
+    valid, broke = False, False
+    while not valid:
+        broke = False
+        x, y = randint(0, 60), randint(0, 60)
+        for i in range(4):
+            for j in range(4):
+                earth = earths[y + j][x + i]
+                if earth and earth.is_visible:
+                    broke = True
+                    break
+            if broke:
+                break
+        else:
+            valid = True
+    return x, y

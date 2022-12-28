@@ -1,7 +1,7 @@
 from src.game_const import VIEW_HEIGHT, VIEW_WIDTH
 from src.game_const import START_LIVES
 from src.game_enums import GameState, Direction
-from src.helper import gen_coords, in_range
+from src.helper import *
 from src.tunnelman import TunnelMan
 from src.waterpool import WaterPool
 from src.boulder import Boulder
@@ -11,6 +11,7 @@ from src.sonar import Sonar
 from src.earth import Earth
 from src.gold import Gold
 from src.oil import Oil
+from random import randint
 
 
 class GameModel:
@@ -20,9 +21,10 @@ class GameModel:
         self.lives: int = START_LIVES
         self.level: int = 0
         self.score: int = 0
+        self.max_tickful_actor_ticks = None
+        self.chance_spawn_sw = None
         # actor containers
         self.earth: list[list[Earth or None]] = None
-        # maybe this should start empty
         self.boulders: list[Boulder] = []
         self.player: TunnelMan = None
         self.sonar: Sonar = None
@@ -84,15 +86,32 @@ class GameModel:
             x, y = gen_coords(dist_actors)
             self.gold.append(Gold(x, y))
 
+    def calc_tickful_max_ticks(self) -> None:
+        self.max_tickful_actor_ticks = max(100, 300 - (10 * self.level))
+
+    def calc_chance_spawn_sw(self) -> None:
+        self.chance_spawn_sw = (self.level * 25) + 300
+
     def create_new_world(self) -> None:
         self.init_earth()
         self.create_oil()
+        self.calc_tickful_max_ticks()
+        self.calc_chance_spawn_sw()
         self.sonar = Sonar()
         self.create_boulders()
         self.create_gold()
         # TODO: protesters
         self.player = TunnelMan()
-        print(f"Lives: {self.lives}")
+
+    def try_spawn_sonar_water(self) -> None:
+        # 1 is simply the sentinel
+        if randint(1, self.chance_spawn_sw) == 1:
+            if randint(1, 5) == 1:
+                if not self.sonar:
+                    self.sonar = Sonar()
+            else:
+                x, y = gen_coords_earthless_4x4(self.earth)
+                self.water.append(WaterPool(x, y))
 
     def tick(self, keys_pressed, view):
         # earth does nothing
@@ -125,6 +144,9 @@ class GameModel:
 
         # TODO: missing protesters
 
+        # try to spawn actors
+        self.try_spawn_sonar_water()
+
         if not self.oil:
             self.score += 1000
             self.state = GameState.BEAT_LEVEL_MENU
@@ -143,8 +165,3 @@ class GameModel:
 # a count of the following should live in the TM class
 # but the collection of these objects does belong here
 # health, squirts, gold, oil, sonar
-
-# Used data class before but unsing field and default
-# factory is tragic
-
-# create at end of the tick
