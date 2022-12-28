@@ -52,4 +52,4 @@ class Gold(Actor):
             self.is_alive = False
             view.play_sound(Music.GOT_GOODIE)
             model.score += 10
-            model.player.gold += 1
+            model.player.gold_count += 1

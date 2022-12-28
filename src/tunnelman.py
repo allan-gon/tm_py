@@ -15,8 +15,9 @@ class TunnelMan(Actor):
     imgs = [scale(img, (SPRITE_WIDTH, SPRITE_HEIGHT)) for img in imgs]
 
     def __init__(self):
-        self.gold = 0
+        self.gold_count = 0
         self.sonar_count = 0
+        self.water_count = 0
         super().__init__(30, 0, visible=True, direction=Direction.RIGHT)
 
     def do_something(self, model: GameModel, view: GameView, keys: list):
