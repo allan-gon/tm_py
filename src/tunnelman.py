@@ -2,7 +2,7 @@
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT, BORDER
 from src.game_enums import Image, Direction, Music
 from src.actor import *
-from pygame import K_w, K_a, K_s, K_d, K_SPACE, K_TAB, K_ESCAPE
+from pygame.locals import K_w, K_a, K_s, K_d, K_z, K_SPACE, K_TAB, K_ESCAPE
 from pygame.transform import scale
 from pygame.image import load
 
@@ -30,6 +30,15 @@ class TunnelMan(Actor):
                 self.water_count -= 1
                 model.try_spawn_squirt_next_to(self)
                 view.play_sound(Music.PLAYER_SQUIRT)
+        elif keys[K_z]:
+            if self.sonar_count > 0:
+                self.sonar_count -= 1
+                model.use_sonar(self)
+                view.play_sound(Music.SONAR)
+        elif keys[K_TAB]:
+            if self.gold_count > 0:
+                self.gold_count -= 1
+                model.place_gold(self)
         # up and down inc reversed bc origin is top left not bot left
         elif keys[K_w]:
             if self.direction == Direction.UP:
@@ -102,6 +111,8 @@ class TunnelMan(Actor):
                         dug = True
         return dug
 
+    # TODO: take a look at page 29.
+    # shits garbo but says radius of 3 from center of boulder
     def boulder_obstructs(self, boulders: list[Actor]) -> bool:
         match self.direction:
             case Direction.UP:

@@ -25,25 +25,24 @@ class Gold(Actor):
         # i dont think i need to check if alive because this should only be called if alive
         # if self.is_alive:
         if self.placed:
-            if self.ticks_elapsed == model.tickful_actor_max_ticks:
+            if self.ticks_elapsed == model.max_tickful_actor_ticks:
                 self.is_alive = False
             else:
-                bribed = False
-                for rp in model.regular_protesters:
-                    if in_range(self, rp, 3):
-                        self.is_alive = False
-                        view.play_sound(Music.PROTESTER_FOUND_GOLD)
-                        # rp.state = State.BRIBED
-                        model.score += 25
-                        bribed = True  # can only bribe one
-                        break
-                for hp in model.hardcore_protesters:
-                    if in_range(self, hp, 3):
-                        self.is_alive = False
-                        view.play_sound(Music.PROTESTER_FOUND_GOLD)
-                        # hp.state = State.BRIBED
-                        model.score += 25
-                        break
+                # for rp in model.regular_protesters:
+                #     if in_range(self, rp, 3):
+                #         self.is_alive = False
+                #         view.play_sound(Music.PROTESTER_FOUND_GOLD)
+                #         # rp.state = State.BRIBED
+                #         model.score += 25
+                #         break  # can only bribe one
+                # else:
+                #     for hp in model.hardcore_protesters:
+                #         if in_range(self, hp, 3):
+                #             self.is_alive = False
+                #             view.play_sound(Music.PROTESTER_FOUND_GOLD)
+                #             # hp.state = State.BRIBED
+                #             model.score += 25
+                #             break
                 self.ticks_elapsed += 1
         elif not self.is_visible:
             if in_range(self, model.player, 4):

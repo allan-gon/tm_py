@@ -1,5 +1,5 @@
 """Handles interactions between Model and View"""
-from src.game_enums import GameState
+from src.game_enums import GameState, Music
 from src.game_const import *
 from src.model import GameModel
 from src.view import GameView
@@ -29,6 +29,7 @@ class GameController:
             match self.model.state:
                 case GameState.START_MENU:
                     self.view.draw_menu(START_M1, START_M2)
+                    self.view.play_sound(Music.THEME)
                     if keys_pressed[K_RETURN]:
                         self.model.state = GameState.PLAYING
                         self.model.create_new_world()

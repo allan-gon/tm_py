@@ -100,6 +100,8 @@ class GameModel:
         self.sonar = Sonar()
         self.create_boulders()
         self.create_gold()
+        self.water = []
+        self.squirts = []
         # TODO: protesters
         self.player = TunnelMan()
 
@@ -151,6 +153,15 @@ class GameModel:
                                 break
                         else:
                             self.squirts.append(temp)
+
+    def use_sonar(self, actor: Actor) -> None:
+        hidden_actors = self.oil + self.gold
+        for ha in hidden_actors:
+            if in_range(ha, actor, 12):
+                ha.is_visible = True
+
+    def place_gold(self, actor: Actor) -> None:
+        self.gold.append(Gold(actor.x, actor.y, True, True))
 
     def tick(self, keys_pressed, view):
         # earth does nothing
