@@ -24,6 +24,7 @@ def gen_coords(actors: list[Actor], y_right: int = 60) -> tuple[int]:
     return temp.x, temp.y
 
 
+# TODO: fix
 # audio is delayed. spawning water is bugged.
 # it clipped top layer
 def gen_coords_earthless_4x4(earths: list[list[Earth or None]]) -> tuple[int]:
@@ -42,3 +43,12 @@ def gen_coords_earthless_4x4(earths: list[list[Earth or None]]) -> tuple[int]:
         else:
             valid = True
     return x, y
+
+
+def is_clear_4x4(actor: Actor, earths: list[list[Earth or None]]) -> bool:
+    for i in range(4):
+        for j in range(4):
+            earth = earths[actor.y + j][actor.x + i]
+            if earth and earth.is_visible:
+                return False
+    return True

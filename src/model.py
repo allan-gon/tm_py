@@ -113,6 +113,45 @@ class GameModel:
                 x, y = gen_coords_earthless_4x4(self.earth)
                 self.water.append(WaterPool(x, y))
 
+    def try_spawn_squirt_next_to(self, actor: Actor) -> None:
+        match actor.direction:
+            case Direction.UP:
+                temp = Squirt(actor.x, actor.y - 4, actor.direction)
+                if temp.y >= 0:
+                    if is_clear_4x4(temp, self.earth):
+                        for boulder in self.boulders:
+                            if in_range(boulder, temp, 3):
+                                break
+                        else:
+                            self.squirts.append(temp)
+            case Direction.DOWN:
+                temp = Squirt(actor.x, actor.y + 4, actor.direction)
+                if temp.y <= 60:
+                    if is_clear_4x4(temp, self.earth):
+                        for boulder in self.boulders:
+                            if in_range(boulder, temp, 3):
+                                break
+                        else:
+                            self.squirts.append(temp)
+            case Direction.LEFT:
+                temp = Squirt(actor.x - 4, actor.y, actor.direction)
+                if temp.x >= 0:
+                    if is_clear_4x4(temp, self.earth):
+                        for boulder in self.boulders:
+                            if in_range(boulder, temp, 3):
+                                break
+                        else:
+                            self.squirts.append(temp)
+            case Direction.RIGHT:
+                temp = Squirt(actor.x + 4, actor.y, actor.direction)
+                if temp.x <= 60:
+                    if is_clear_4x4(temp, self.earth):
+                        for boulder in self.boulders:
+                            if in_range(boulder, temp, 3):
+                                break
+                        else:
+                            self.squirts.append(temp)
+
     def tick(self, keys_pressed, view):
         # earth does nothing
         for oil in self.oil:

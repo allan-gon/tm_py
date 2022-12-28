@@ -16,13 +16,22 @@ class TunnelMan(Actor):
 
     def __init__(self):
         self.gold_count = 0
-        self.sonar_count = 0
-        self.water_count = 0
+        self.sonar_count = 1
+        self.water_count = 5
+        # missing health: 10
         super().__init__(30, 0, visible=True, direction=Direction.RIGHT)
 
     def do_something(self, model: GameModel, view: GameView, keys: list):
+        # non-movement inputs
+        if keys[K_ESCAPE]:
+            self.is_alive = False
+        elif keys[K_SPACE]:
+            if self.water_count > 0:
+                self.water_count -= 1
+                model.try_spawn_squirt_next_to(self)
+                view.play_sound(Music.PLAYER_SQUIRT)
         # up and down inc reversed bc origin is top left not bot left
-        if keys[K_w]:
+        elif keys[K_w]:
             if self.direction == Direction.UP:
                 if self.y > 0:
                     if self.dig(model.earth):
