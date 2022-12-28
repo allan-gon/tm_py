@@ -1,6 +1,7 @@
 # from src.entity import Entity
 from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT, BORDER
 from src.game_enums import Image, Direction, Music
+from src.helper import boulder_obstructs
 from src.actor import *
 from pygame.locals import K_w, K_a, K_s, K_d, K_z, K_SPACE, K_TAB, K_ESCAPE
 from pygame.transform import scale
@@ -45,7 +46,7 @@ class TunnelMan(Actor):
                 if self.y > 0:
                     if self.dig(model.earth):
                         view.play_sound(Music.DIG)
-                    if not self.boulder_obstructs(model.boulders):
+                    if not boulder_obstructs(self, model.boulders):
                         self.y -= 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
@@ -55,7 +56,7 @@ class TunnelMan(Actor):
                 if self.y < 60:
                     if self.dig(model.earth):
                         view.play_sound(Music.DIG)
-                    if not self.boulder_obstructs(model.boulders):
+                    if not boulder_obstructs(self, model.boulders):
                         self.y += 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
@@ -65,7 +66,7 @@ class TunnelMan(Actor):
                 if self.x > 0:
                     if self.dig(model.earth):
                         view.play_sound(Music.DIG)
-                    if not self.boulder_obstructs(model.boulders):
+                    if not boulder_obstructs(self, model.boulders):
                         self.x -= 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
@@ -75,7 +76,7 @@ class TunnelMan(Actor):
                 if self.x < 60:
                     if self.dig(model.earth):
                         view.play_sound(Music.DIG)
-                    if not self.boulder_obstructs(model.boulders):
+                    if not boulder_obstructs(self, model.boulders):
                         self.x += 1
                         self.img_num = (self.img_num + 1) % len(TunnelMan.imgs)
             else:
@@ -110,33 +111,3 @@ class TunnelMan(Actor):
                         earth.is_visible = False
                         dug = True
         return dug
-
-    # TODO: take a look at page 29.
-    # shits garbo but says radius of 3 from center of boulder
-    def boulder_obstructs(self, boulders: list[Actor]) -> bool:
-        match self.direction:
-            case Direction.UP:
-                for boulder in boulders:
-                    if (boulder.y == (self.y - 4)) and (
-                        (self.x - 4) < boulder.x < (self.x + 4)
-                    ):
-                        return True
-            case Direction.DOWN:
-                for boulder in boulders:
-                    if (boulder.y == (self.y + 4)) and (
-                        (self.x - 4) < boulder.x < (self.x + 4)
-                    ):
-                        return True
-            case Direction.LEFT:
-                for boulder in boulders:
-                    if (boulder.x == (self.x - 4)) and (
-                        (self.y - 4) < boulder.y < (self.y + 4)
-                    ):
-                        return True
-            case Direction.RIGHT:
-                for boulder in boulders:
-                    if (boulder.x == (self.x + 4)) and (
-                        (self.y - 4) < boulder.y < (self.y + 4)
-                    ):
-                        return True
-        return False

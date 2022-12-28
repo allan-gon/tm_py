@@ -1,4 +1,5 @@
 from random import sample, randint
+from src.game_enums import Direction
 from src.actor import Actor
 from src.earth import Earth
 
@@ -52,3 +53,35 @@ def is_clear_4x4(actor: Actor, earths: list[list[Earth or None]]) -> bool:
             if earth and earth.is_visible:
                 return False
     return True
+
+    # TODO: take a look at page 29.
+    # shits garbo but says radius of 3 from center of boulder
+
+
+def boulder_obstructs(actor: Actor, boulders: list[Actor]) -> bool:
+    match actor.direction:
+        case Direction.UP:
+            for boulder in boulders:
+                if (boulder.y == (actor.y - 4)) and (
+                    (actor.x - 4) < boulder.x < (actor.x + 4)
+                ):
+                    return True
+        case Direction.DOWN:
+            for boulder in boulders:
+                if (boulder.y == (actor.y + 4)) and (
+                    (actor.x - 4) < boulder.x < (actor.x + 4)
+                ):
+                    return True
+        case Direction.LEFT:
+            for boulder in boulders:
+                if (boulder.x == (actor.x - 4)) and (
+                    (actor.y - 4) < boulder.y < (actor.y + 4)
+                ):
+                    return True
+        case Direction.RIGHT:
+            for boulder in boulders:
+                if (boulder.x == (actor.x + 4)) and (
+                    (actor.y - 4) < boulder.y < (actor.y + 4)
+                ):
+                    return True
+    return False
