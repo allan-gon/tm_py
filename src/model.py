@@ -2,6 +2,7 @@ from src.game_const import VIEW_HEIGHT, VIEW_WIDTH
 from src.game_const import START_LIVES
 from src.game_enums import GameState, Direction
 from src.helper import *
+from src.regular_protester import RegularProtester
 from src.tunnelman import TunnelMan
 from src.waterpool import WaterPool
 from src.boulder import Boulder
@@ -23,6 +24,10 @@ class GameModel:
         self.score: int = 0
         self.max_tickful_actor_ticks = None
         self.chance_spawn_sw = None
+        self.protester_spawn_tick_buffer = None
+        self.ticks_since_protester_spawn = None
+        self.max_protesters = None
+        self.chance_hardcore = None
         # actor containers
         self.earth: list[list[Earth or None]] = None
         self.boulders: list[Boulder] = []
@@ -32,9 +37,15 @@ class GameModel:
         self.squirts: list[Squirt] = []
         self.gold: list[Gold] = []
         self.oil: list[Oil] = []
+        self.regular_protesters: list[RegularProtester] = []
+        # self.harcore_protesters: list[HardcoreProtester] = []
 
     def get_stats(self) -> str:
-        return f"Lvl: {self.level} Lives: {self.lives} Hlth: {self.player.health * 10}% Wtr: {self.player.water_count} Gld: {self.player.gold_count} Oil left: {len(self.oil)} Sonar: {self.player.sonar_count} Scr: {self.score}"
+        return (
+            f"Lvl: {self.level} Lives: {self.lives} Hlth: {self.player.health * 10}%"
+            f" Wtr: {self.player.water_count} Gld: {self.player.gold_count}"
+            f" Oil left: {len(self.oil)} Sonar: {self.player.sonar_count} Scr: {self.score}"
+        )
 
     def init_earth(self) -> None:
         self.earth = []
@@ -95,6 +106,11 @@ class GameModel:
     def calc_chance_spawn_sw(self) -> None:
         self.chance_spawn_sw = (self.level * 25) + 300
 
+    def calc_protester_helpers(self) -> None:
+        self.protester_spawn_tick_buffer = max(25, 200 - self.level)
+        self.max_protesters = min(15, int(2 + (self.level * 1.5)))
+        self.chance_hardcore = min(90, (self.level * 10) + 30)
+
     def create_new_world(self) -> None:
         self.init_earth()
         self.create_oil()
@@ -105,7 +121,11 @@ class GameModel:
         self.create_gold()
         self.water = []
         self.squirts = []
-        # TODO: protesters
+        self.calc_protester_helpers()
+        self.ticks_since_protester_spawn = 0
+        self.regular_protesters = []
+        # self.harcore_protesters = []
+        self.add_protester(force=True)
         self.player = TunnelMan()
 
     def try_spawn_sonar_water(self) -> None:
@@ -165,6 +185,19 @@ class GameModel:
 
     def place_gold(self, actor: Actor) -> None:
         self.gold.append(Gold(actor.x, actor.y, True, True))
+
+    def add_protester(self, force: bool = False) -> None:
+        # self.harcore_protesters
+        if (len(self.regular_protesters) + len([])) < self.max_protesters:
+            if force or (
+                self.ticks_since_protester_spawn >= self.protester_spawn_tick_buffer
+            ):
+                self.ticks_since_protester_spawn = 0
+                if randint(1, 100) <= self.chance_hardcore:
+                    # self.harcore_protesters.append(HardcoreProtester())
+                    pass
+                else:
+                    self.regular_protesters.append(RegularProtester())
 
     def tick(self, keys_pressed, view):
         # earth does nothing

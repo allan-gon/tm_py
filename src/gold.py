@@ -22,10 +22,8 @@ class Gold(Actor):
         super().__init__(x, y, visible=visible, direction=direction)
 
     def do_something(self, model: GameModel, view: GameView) -> None:
-        # i dont think i need to check if alive because this should only be called if alive
-        # if self.is_alive:
         if self.placed:
-            if self.ticks_elapsed == model.max_tickful_actor_ticks:
+            if self.ticks_elapsed == 100:
                 self.is_alive = False
             else:
                 # for rp in model.regular_protesters:
@@ -41,7 +39,7 @@ class Gold(Actor):
                 #             self.is_alive = False
                 #             view.play_sound(Music.PROTESTER_FOUND_GOLD)
                 #             # hp.state = State.BRIBED
-                #             model.score += 25
+                #             model.score += 50
                 #             break
                 self.ticks_elapsed += 1
         elif not self.is_visible:

@@ -12,7 +12,8 @@ from src.squirt import Squirt
 from src.boulder import Boulder
 from src.tunnelman import TunnelMan
 
-# from src.protester import RegularProtester
+from src.regular_protester import RegularProtester
+
 # from src.hardcore import HardCoreProtester
 from pygame.display import set_mode, set_caption, update
 from pygame.transform import flip, rotate
@@ -85,7 +86,7 @@ class GameView:
         self.draw_actor_container(model.squirts, Squirt.imgs)
         self.draw_actor_container(model.boulders, Boulder.imgs)
         self.draw_actor(model.player, TunnelMan.imgs[model.player.img_num])
-        # self.draw_actor_container(model.regular_protester, RegularProtester.imgs)
+        self.draw_actor_container(model.regular_protesters, RegularProtester.imgs)
         # self.draw_actor_container(model.hardcore_protester, HardcoreProtester.imgs)
         self.display_stats(model)
         update()

@@ -1,9 +1,9 @@
 # from src.entity import Entity
-from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT, BORDER
+from src.game_const import SPRITE_WIDTH, SPRITE_HEIGHT
 from src.game_enums import Image, Direction, Music
 from src.helper import boulder_obstructs
 from src.actor import *
-from pygame.locals import K_w, K_a, K_s, K_d, K_z, K_SPACE, K_TAB, K_ESCAPE
+from pygame.locals import K_w, K_a, K_s, K_d, K_z, K_q, K_SPACE, K_TAB, K_ESCAPE
 from pygame.transform import scale
 from pygame.image import load
 
@@ -24,7 +24,10 @@ class TunnelMan(Actor):
 
     def do_something(self, model: GameModel, view: GameView, keys: list):
         # non-movement inputs
-        if keys[K_ESCAPE]:
+        if keys[K_q]:
+            model.lives = 1  # this get drecremented again in model.tick
+            self.is_alive = False
+        elif keys[K_ESCAPE]:
             self.is_alive = False
         elif keys[K_SPACE]:
             if self.water_count > 0:

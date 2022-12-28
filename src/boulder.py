@@ -41,9 +41,7 @@ class Boulder(Actor):
                 if self.hit_earth_or_boulder(model.earth, model.boulders):
                     self.is_alive = False
                 else:
-                    self.hit_entity(
-                        model.player,  # model.regular_protesters, model.harcore_protesters
-                    )
+                    self.hit_entity(model)
 
     def dirt_in_1x4_below_actor(self, earths: list[list[Actor or None]]) -> bool:
         for i in range(4):
@@ -68,17 +66,16 @@ class Boulder(Actor):
                         return True
         return False
 
-    def hit_entity(
-        self,
-        player: Actor,  # regular: list[Actor], hardcore: list[Actor]
-    ) -> None:
-        if in_range(player, self, 3):
-            player.is_alive = False
+    def hit_entity(self, model: GameModel) -> None:
+        if in_range(model.player, self, 3):
+            model.player.is_alive = False
             return
-        # TODO: missing rg, hp, and state
-        # for rp in regular:
-        #     if in_range(actor, rp, 3):
+        # # TODO: missing rg, hp, and state
+        # for rp in model.regular_protesters:
+        #     if in_range(model.player, rp, 3):
         #         rp.state = State.LEAVE
-        # for hp in hardcore:
-        #     if in_range(actor, hp, 3):
+        #         model.score += 500
+        # for hp in model.hardcore_protesters:
+        #     if in_range(model.player, hp, 3):
         #         hp.state = State.LEAVE
+        #         model.score += 500

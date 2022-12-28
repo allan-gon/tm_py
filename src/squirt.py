@@ -17,7 +17,7 @@ class Squirt(Actor):
         if self.ticks_elapsed == 4:
             self.is_alive = False
             return
-        
+        # if squirted to death you get 100 or 250 points
         # try to deal damage to protesters
         # for rp in model.regular_protesters:
         #     if in_range(self, rp, 3):
